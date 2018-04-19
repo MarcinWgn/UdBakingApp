@@ -1,5 +1,6 @@
 package com.wegrzyn.marcin.bakingapp;
 
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +14,7 @@ import com.wegrzyn.marcin.bakingapp.Http.HttpOperation;
 import com.wegrzyn.marcin.bakingapp.Http.HttpUtils;
 import com.wegrzyn.marcin.bakingapp.Model.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -22,6 +24,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements RecipesAdapter.ListItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName() ;
+    public static final String RECIPE_LIST = "recipe_list";
 
     private ProgressBar progressBar;
     private RecipesAdapter adapter;
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
 
         progressBar = findViewById(R.id.progress);
 
+        if (savedInstanceState != null ){
+            recipeList = savedInstanceState.getParcelableArrayList(RECIPE_LIST);
+        }else getRecipes();
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -45,9 +51,15 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
         adapter = new RecipesAdapter(this,recipeList,this);
         recyclerView.setAdapter(adapter);
 
-        getRecipes();
+
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(RECIPE_LIST, (ArrayList<? extends Parcelable>) recipeList);
+    }
 
     private void getRecipes(){
 
