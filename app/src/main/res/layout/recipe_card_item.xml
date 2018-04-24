@@ -2,14 +2,17 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    android:background="@drawable/list_touch_selector"
     xmlns:tools="http://schemas.android.com/tools">
     
     <TextView
         android:id="@+id/recipe_name_tv"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:gravity="center"
+        android:background="@drawable/list_touch_selector"
         tools:text="Apple Pie"/>
 
 </FrameLayout>

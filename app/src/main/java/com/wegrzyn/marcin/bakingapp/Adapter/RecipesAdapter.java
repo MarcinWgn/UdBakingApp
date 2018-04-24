@@ -64,7 +64,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             super(itemView);
 
             recipeNameTextView = itemView.findViewById(R.id.recipe_name_tv);
-            recipeNameTextView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override

@@ -30,28 +30,7 @@ public class Recipe implements Parcelable {
     @Expose
     private String image;
 
-    private Recipe(Parcel in) {
-      id = in.readInt();
-      name = in.readString();
-      ingredients = new ArrayList<Ingredient>();
-      in.readTypedList(ingredients,Ingredient.CREATOR);
-      steps = new ArrayList<Step>();
-      in.readTypedList(steps,Step.CREATOR);
-      servings = in.readInt();
-      image = in.readString();
-    }
 
-    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
-        @Override
-        public Recipe createFromParcel(Parcel in) {
-            return new Recipe(in);
-        }
-
-        @Override
-        public Recipe[] newArray(int size) {
-            return new Recipe[size];
-        }
-    };
 
     public Integer getId() {
         return id;
@@ -84,11 +63,37 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeTypedList(ingredients);
-        dest.writeTypedList(steps);
-        dest.writeInt(servings);
-        dest.writeString(image);
+        dest.writeValue(this.id);
+        dest.writeString(this.name);
+        dest.writeList(this.ingredients);
+        dest.writeList(this.steps);
+        dest.writeValue(this.servings);
+        dest.writeString(this.image);
     }
+
+    public Recipe() {
+    }
+
+    protected Recipe(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.name = in.readString();
+        this.ingredients = new ArrayList<Ingredient>();
+        in.readList(this.ingredients, Ingredient.class.getClassLoader());
+        this.steps = new ArrayList<Step>();
+        in.readList(this.steps, Step.class.getClassLoader());
+        this.servings = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.image = in.readString();
+    }
+
+    public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel source) {
+            return new Recipe(source);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 }

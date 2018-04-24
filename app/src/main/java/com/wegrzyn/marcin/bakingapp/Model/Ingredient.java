@@ -19,23 +19,6 @@ public class Ingredient implements Parcelable {
     @Expose
     private String ingredient;
 
-    private Ingredient(Parcel in) {
-        quantity = in.readFloat();
-        measure = in.readString();
-        ingredient = in.readString();
-    }
-
-    public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
-        @Override
-        public Ingredient createFromParcel(Parcel in) {
-            return new Ingredient(in);
-        }
-
-        @Override
-        public Ingredient[] newArray(int size) {
-            return new Ingredient[size];
-        }
-    };
 
     public float getQuantity() {
         return quantity;
@@ -49,7 +32,6 @@ public class Ingredient implements Parcelable {
         return ingredient;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -57,9 +39,29 @@ public class Ingredient implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
-        dest.writeFloat(quantity);
-        dest.writeString(measure);
-        dest.writeString(ingredient);
+        dest.writeFloat(this.quantity);
+        dest.writeString(this.measure);
+        dest.writeString(this.ingredient);
     }
+
+    public Ingredient() {
+    }
+
+    protected Ingredient(Parcel in) {
+        this.quantity = in.readFloat();
+        this.measure = in.readString();
+        this.ingredient = in.readString();
+    }
+
+    public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
+        @Override
+        public Ingredient createFromParcel(Parcel source) {
+            return new Ingredient(source);
+        }
+
+        @Override
+        public Ingredient[] newArray(int size) {
+            return new Ingredient[size];
+        }
+    };
 }

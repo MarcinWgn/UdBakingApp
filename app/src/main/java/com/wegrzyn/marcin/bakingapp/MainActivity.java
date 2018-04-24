@@ -1,18 +1,24 @@
 package com.wegrzyn.marcin.bakingapp;
 
+import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.wegrzyn.marcin.bakingapp.Adapter.RecipesAdapter;
 import com.wegrzyn.marcin.bakingapp.Http.HttpOperation;
 import com.wegrzyn.marcin.bakingapp.Http.HttpUtils;
 import com.wegrzyn.marcin.bakingapp.Model.Recipe;
+import com.wegrzyn.marcin.bakingapp.Model.Step;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
 
     private static final String TAG = MainActivity.class.getSimpleName() ;
     public static final String RECIPE_LIST = "recipe_list";
+    public static final String RECIPE_EXTRA = "recipe_extra";
 
     private ProgressBar progressBar;
     private RecipesAdapter adapter;
@@ -41,11 +48,12 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
             recipeList = savedInstanceState.getParcelableArrayList(RECIPE_LIST);
         }else getRecipes();
 
+
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager mLayoutManager =
-                new GridLayoutManager(this, 1);
+                new GridLayoutManager(this, getResources().getInteger(R.integer.column_size));
         recyclerView.setLayoutManager(mLayoutManager);
 
         adapter = new RecipesAdapter(this,recipeList,this);
@@ -78,20 +86,41 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
                     adapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
-
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 Log.d(TAG," onFailure: "+ t.getMessage());
+                Toast.makeText(getBaseContext(),t.getMessage(),Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
             }
         });
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.refresh_item_id){
+            getRecipes();
+            return true;
+        }else return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onListItemClick(int clickItemIndex) {
-
         Log.d(TAG, String.valueOf(clickItemIndex)+" item cliced");
+
+        Intent intent = new Intent(this,RecipeStepsActivity.class);
+        intent.putExtra(RECIPE_EXTRA,recipeList.get(clickItemIndex));
+        startActivity(intent);
     }
 }
