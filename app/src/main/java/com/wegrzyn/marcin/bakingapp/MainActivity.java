@@ -97,8 +97,6 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
                 progressBar.setVisibility(View.INVISIBLE);
             }
         });
-
-
     }
 
     @Override

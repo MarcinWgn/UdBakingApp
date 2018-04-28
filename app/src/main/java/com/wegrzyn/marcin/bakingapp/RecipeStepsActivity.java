@@ -1,5 +1,6 @@
 package com.wegrzyn.marcin.bakingapp;
 
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 import com.wegrzyn.marcin.bakingapp.Model.Recipe;
 import com.wegrzyn.marcin.bakingapp.Model.Step;
 
+import java.util.ArrayList;
+
 public class RecipeStepsActivity extends AppCompatActivity
         implements MasterStepsFragment.OnStepSelectedListener, DetailRecipeFragment.OnButtonClickListener{
 
@@ -19,6 +22,7 @@ public class RecipeStepsActivity extends AppCompatActivity
 
     public static final String RECIPE = "recipe";
     public static final String BUNDLE_STEP = "bundle step";
+    public static final String BUNDLE_INGREDIENTS = "bundle ingredients";
     private boolean mTabletMode;
     private Recipe recipe;
 
@@ -34,7 +38,14 @@ public class RecipeStepsActivity extends AppCompatActivity
             curPosition = savedInstanceState.getInt(POSITION);
         }
         getData();
-        if(getSupportActionBar()!=null)getSupportActionBar().setTitle(recipe.getName());
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setTitle(recipe.getName());
+            if(curPosition>-1
+                    && !getResources().getBoolean(R.bool.tablet)
+                    &&getResources().getBoolean(R.bool.landscape_mode)
+                    &&!recipe.getSteps().get(curPosition).getVideoURL().isEmpty())
+            getSupportActionBar().hide();
+        }
 
         Bundle recipeBundle = new Bundle();
         recipeBundle.putParcelable(RECIPE,recipe);
@@ -72,15 +83,19 @@ public class RecipeStepsActivity extends AppCompatActivity
 
     @Override
     public void onStepSelected(int position) {
-
         curPosition = position;
-
         replaceFragment(position);
     }
 
     private void replaceFragment(int position) {
+
         Bundle bundle = new Bundle();
-        bundle.putParcelable(BUNDLE_STEP,recipe.getSteps().get(position));
+        if(position==-1){
+            bundle.putParcelableArrayList(BUNDLE_INGREDIENTS, (ArrayList<? extends Parcelable>) recipe.getIngredients());
+        }else{
+            bundle.putParcelable(BUNDLE_STEP,recipe.getSteps().get(position));
+        }
+
 
         if(!mTabletMode){
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -126,7 +141,7 @@ public class RecipeStepsActivity extends AppCompatActivity
                 Log.d(TAG, "next button");
                 break;
             case R.id.prev_btn:
-                if(curPosition > 0 ){
+                if(curPosition > -1 ){
                     curPosition--;
                 }
                 replaceFragment(curPosition);

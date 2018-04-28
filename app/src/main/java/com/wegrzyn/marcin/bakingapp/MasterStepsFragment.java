@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wegrzyn.marcin.bakingapp.Adapter.StepsAdapter;
 import com.wegrzyn.marcin.bakingapp.Model.Ingredient;
@@ -61,13 +62,15 @@ public class MasterStepsFragment extends Fragment implements StepsAdapter.ListIt
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
         View rootView = inflater.inflate(R.layout.master_steps_fragment,container,false);
 
-        TextView ingredientsView = rootView.findViewById(R.id.ingredients_tv);
-
-        showIngredients(ingredientsView);
-
+        TextView ingredientsView = rootView.findViewById(R.id.ingredients_label);
+        ingredientsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onStepSelected(-1);
+            }
+        });
 
         RecyclerView recyclerView = rootView.findViewById(R.id.steps_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -79,25 +82,12 @@ public class MasterStepsFragment extends Fragment implements StepsAdapter.ListIt
 
         return rootView;
     }
-
-    private void showIngredients(TextView ingredientsView) {
-        if(!ingredients.isEmpty()){
-            for (Ingredient ing :ingredients) {
-                ingredientsView.append(ing.getIngredient()
-                        +" "+String.valueOf(ing.getQuantity())
-                        +" "+ing.getMeasure()+"\n");
-            }
-        }
-    }
-
-
     private void getData() {
         if(getArguments()!=null){
            recipe = getArguments().getParcelable(RecipeStepsActivity.RECIPE);
            steps = recipe.getSteps();
            ingredients = recipe.getIngredients();
         }
-
     }
 
     @Override
@@ -109,6 +99,6 @@ public class MasterStepsFragment extends Fragment implements StepsAdapter.ListIt
     }
 
     public interface OnStepSelectedListener{
-        public void onStepSelected(int position);
+        void onStepSelected(int position);
     }
 }
