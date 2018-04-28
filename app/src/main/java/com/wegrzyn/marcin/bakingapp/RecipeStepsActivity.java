@@ -7,10 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.wegrzyn.marcin.bakingapp.Model.Recipe;
-import com.wegrzyn.marcin.bakingapp.Model.Step;
 
 import java.util.ArrayList;
 
@@ -52,7 +51,7 @@ public class RecipeStepsActivity extends AppCompatActivity
         Bundle stepStart = new Bundle();
         stepStart.putParcelable(BUNDLE_STEP,recipe.getSteps().get(0));
 
-        if(findViewById(R.id.tablet_layout)!= null){
+            if(getResources().getBoolean(R.bool.tablet)){
             mTabletMode = true;
 
             if(savedInstanceState==null){
@@ -127,7 +126,7 @@ public class RecipeStepsActivity extends AppCompatActivity
 
     /**
      *  Callback from DetailRecipeFragment
-     * @param view
+     * @param view get button view
      */
     @Override
     public void onButtonClick(View view) {
@@ -138,14 +137,12 @@ public class RecipeStepsActivity extends AppCompatActivity
                    curPosition ++;
                 }
                 replaceFragment(curPosition);
-                Log.d(TAG, "next button");
                 break;
             case R.id.prev_btn:
                 if(curPosition > -1 ){
                     curPosition--;
                 }
                 replaceFragment(curPosition);
-                Log.d(TAG, "prev button");
                 break;
         }
     }

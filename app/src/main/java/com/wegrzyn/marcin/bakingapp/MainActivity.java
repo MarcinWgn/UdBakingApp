@@ -2,7 +2,6 @@ package com.wegrzyn.marcin.bakingapp;
 
 import android.content.Intent;
 import android.os.Parcelable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,7 +18,6 @@ import com.wegrzyn.marcin.bakingapp.Adapter.RecipesAdapter;
 import com.wegrzyn.marcin.bakingapp.Http.HttpOperation;
 import com.wegrzyn.marcin.bakingapp.Http.HttpUtils;
 import com.wegrzyn.marcin.bakingapp.Model.Recipe;
-import com.wegrzyn.marcin.bakingapp.Model.Step;
 
 import java.util.ArrayList;
 import java.util.List;

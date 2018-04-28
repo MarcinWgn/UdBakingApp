@@ -2,7 +2,6 @@ package com.wegrzyn.marcin.bakingapp;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,14 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wegrzyn.marcin.bakingapp.Adapter.StepsAdapter;
 import com.wegrzyn.marcin.bakingapp.Model.Ingredient;
 import com.wegrzyn.marcin.bakingapp.Model.Recipe;
 import com.wegrzyn.marcin.bakingapp.Model.Step;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
