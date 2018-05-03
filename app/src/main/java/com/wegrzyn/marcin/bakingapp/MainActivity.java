@@ -2,6 +2,7 @@ package com.wegrzyn.marcin.bakingapp;
 
 import android.content.Intent;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +19,7 @@ import com.wegrzyn.marcin.bakingapp.Adapter.RecipesAdapter;
 import com.wegrzyn.marcin.bakingapp.Http.HttpOperation;
 import com.wegrzyn.marcin.bakingapp.Http.HttpUtils;
 import com.wegrzyn.marcin.bakingapp.Model.Recipe;
+import com.wegrzyn.marcin.bakingapp.Widget.BakingAppWidget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements RecipesAdapter.ListItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName() ;
+
     public static final String RECIPE_LIST = "recipe_list";
     public static final String RECIPE_EXTRA = "recipe_extra";
 
@@ -58,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
 
         adapter = new RecipesAdapter(this,recipeList,this);
         recyclerView.setAdapter(adapter);
-
-
     }
 
 
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
 
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+            public void onResponse(@NonNull Call<List<Recipe>> call, @NonNull Response<List<Recipe>> response) {
                 Log.d(TAG,"\n"+"onResponse"+"\n");
                 if(response.isSuccessful()){
                     recipeList = response.body();
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
             }
 
             @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Recipe>> call, @NonNull Throwable t) {
                 Log.d(TAG," onFailure: "+ t.getMessage());
                 Toast.makeText(getBaseContext(),t.getMessage(),Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
@@ -116,8 +117,6 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
     @Override
     public void onListItemClick(int clickItemIndex) {
 
-        Log.d(TAG, String.valueOf(clickItemIndex)+" item cliced");
-
         Recipe recipe = recipeList.get(clickItemIndex);
         Intent intent = new Intent(this,RecipeStepsActivity.class);
         intent.putExtra(RECIPE_EXTRA,recipe);
@@ -127,10 +126,10 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
     }
 
     private void sendWidgetBroadcast (Recipe recipe){
-        Intent intentWidget = new Intent("android.appwidget.action.APPWIDGET_UPDATE");
+        Intent intentWidget = new Intent(BakingAppWidget.ACTION_UPDATE);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("bundle_extra",recipe);
-        intentWidget.putExtra("recipe_extra",bundle);
+        bundle.putParcelable(BakingAppWidget.BUNDLE_EXTRA,recipe);
+        intentWidget.putExtra(BakingAppWidget.RECIPE_EXTRA,bundle);
         sendBroadcast(intentWidget);
     }
 

@@ -34,17 +34,17 @@ import java.util.List;
 public class DetailRecipeFragment extends Fragment {
 
     private static final String TAG = DetailRecipeFragment.class.getSimpleName() ;
+
     public static final String EXO_POSITION = "exo_position";
+    public static final String EXO_STATE = "exo_state";
+
     private Step step;
     private List<Ingredient> ingredients;
 
     OnButtonClickListener mCallback;
 
-    Button nextButton;
-    Button prevButton;
-
-    SimpleExoPlayerView exoPlayerView;
-    SimpleExoPlayer exoPlayer;
+    private SimpleExoPlayerView exoPlayerView;
+    private SimpleExoPlayer exoPlayer;
 
     private Long exoPosition;
     private Boolean state;
@@ -79,7 +79,7 @@ public class DetailRecipeFragment extends Fragment {
 
         if(savedInstanceState!=null){
             exoPosition = savedInstanceState.getLong(EXO_POSITION);
-            state = savedInstanceState.getBoolean("state");
+            state = savedInstanceState.getBoolean(EXO_STATE);
         }
     }
 
@@ -120,8 +120,6 @@ public class DetailRecipeFragment extends Fragment {
                         +" "+ing.getMeasure()+"\n");
             }
     }
-
-
     private void exoPlayerInit(Long position) {
         if(exoPlayer==null){
             exoPlayerView.setVisibility(View.VISIBLE);
@@ -147,13 +145,12 @@ public class DetailRecipeFragment extends Fragment {
             exoPlayer = null;
         }
     }
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if(exoPlayer!= null){
             outState.putLong(EXO_POSITION,exoPlayer.getCurrentPosition());
-            outState.putBoolean("state",exoPlayer.getPlayWhenReady());
+            outState.putBoolean(EXO_STATE,exoPlayer.getPlayWhenReady());
         }
 
     }
@@ -173,9 +170,9 @@ public class DetailRecipeFragment extends Fragment {
                     mCallback.onButtonClick(v);
                 }
             };
-            nextButton = rootView.findViewById(R.id.next_btn);
+            Button nextButton = rootView.findViewById(R.id.next_btn);
             nextButton.setOnClickListener(onClickListener);
-            prevButton = rootView.findViewById(R.id.prev_btn);
+            Button prevButton = rootView.findViewById(R.id.prev_btn);
             prevButton.setOnClickListener(onClickListener);
         }
     }

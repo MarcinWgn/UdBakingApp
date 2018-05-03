@@ -30,9 +30,7 @@ public class MasterStepsFragment extends Fragment implements StepsAdapter.ListIt
 
     private static final String TAG = MasterStepsFragment.class.getSimpleName() ;
 
-    private Recipe recipe;
     private List<Step>steps;
-    private List<Ingredient>ingredients;
 
     public MasterStepsFragment(){
     }
@@ -81,9 +79,8 @@ public class MasterStepsFragment extends Fragment implements StepsAdapter.ListIt
     }
     private void getData() {
         if(getArguments()!=null){
-           recipe = getArguments().getParcelable(RecipeStepsActivity.RECIPE);
-           steps = recipe.getSteps();
-           ingredients = recipe.getIngredients();
+            Recipe recipe = getArguments().getParcelable(RecipeStepsActivity.RECIPE);
+            if (recipe != null) steps = recipe.getSteps();
         }
     }
 
@@ -92,7 +89,6 @@ public class MasterStepsFragment extends Fragment implements StepsAdapter.ListIt
 
         mCallback.onStepSelected(clickItemIndex);
         Log.d(TAG, String.valueOf(clickItemIndex));
-
     }
 
     public interface OnStepSelectedListener{

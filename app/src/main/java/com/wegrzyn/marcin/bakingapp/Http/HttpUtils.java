@@ -5,7 +5,7 @@ package com.wegrzyn.marcin.bakingapp.Http;
  * wireamg@gmail.com
  */
 public class HttpUtils {
-    public static final String BASE_URL = "http://go.udacity.com/";
+    private static final String BASE_URL = "http://go.udacity.com/";
     public static final String RECIPES_QUERY = "android-baking-app-json";
 
     public static HttpOperation getHttpService() {
