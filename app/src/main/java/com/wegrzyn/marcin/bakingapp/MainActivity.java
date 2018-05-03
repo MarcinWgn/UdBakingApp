@@ -115,10 +115,23 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
 
     @Override
     public void onListItemClick(int clickItemIndex) {
+
         Log.d(TAG, String.valueOf(clickItemIndex)+" item cliced");
 
+        Recipe recipe = recipeList.get(clickItemIndex);
         Intent intent = new Intent(this,RecipeStepsActivity.class);
-        intent.putExtra(RECIPE_EXTRA,recipeList.get(clickItemIndex));
+        intent.putExtra(RECIPE_EXTRA,recipe);
+        sendWidgetBroadcast(recipe);
+
         startActivity(intent);
     }
+
+    private void sendWidgetBroadcast (Recipe recipe){
+        Intent intentWidget = new Intent("android.appwidget.action.APPWIDGET_UPDATE");
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("bundle_extra",recipe);
+        intentWidget.putExtra("recipe_extra",bundle);
+        sendBroadcast(intentWidget);
+    }
+
 }

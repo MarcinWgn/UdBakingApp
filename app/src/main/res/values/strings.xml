@@ -5,4 +5,6 @@
     <string name="previous">previous</string>
     <string name="next">next</string>
     <string name="intro">Recipe Introduction</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

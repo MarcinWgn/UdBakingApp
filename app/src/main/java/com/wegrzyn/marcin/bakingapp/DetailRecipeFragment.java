@@ -113,7 +113,7 @@ public class DetailRecipeFragment extends Fragment {
         return rootView;
     }
 
-    private void showIngredients(TextView ingredientsView) {
+     private void showIngredients(TextView ingredientsView) {
             for (Ingredient ing :ingredients) {
                 ingredientsView.append(ing.getIngredient()
                         +" "+String.valueOf(ing.getQuantity())
