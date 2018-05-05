@@ -6,8 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wegrzyn.marcin.bakingapp.Model.Recipe;
 import com.wegrzyn.marcin.bakingapp.R;
 
@@ -45,6 +47,14 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     @Override
     public void onBindViewHolder(@NonNull RecipesViewHolder holder, int position) {
 
+        String image = recipeList.get(position).getImage();
+        if(!image.isEmpty()){
+            Picasso.with(context)
+                    .load(image)
+                    .resize(50, 50)
+                    .centerCrop()
+                    .into(holder.recipeImageView);
+        }
         holder.recipeNameTextView.setText(recipeList.get(position).getName());
     }
 
@@ -59,11 +69,13 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     public class RecipesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView recipeNameTextView;
+        final ImageView recipeImageView;
 
         RecipesViewHolder(View itemView) {
             super(itemView);
 
             recipeNameTextView = itemView.findViewById(R.id.recipe_name_tv);
+            recipeImageView = itemView.findViewById(R.id.recipe_image_iv);
             itemView.setOnClickListener(this);
         }
 

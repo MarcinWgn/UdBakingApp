@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wegrzyn.marcin.bakingapp.Adapter.StepsAdapter;
-import com.wegrzyn.marcin.bakingapp.Model.Ingredient;
 import com.wegrzyn.marcin.bakingapp.Model.Recipe;
 import com.wegrzyn.marcin.bakingapp.Model.Step;
 

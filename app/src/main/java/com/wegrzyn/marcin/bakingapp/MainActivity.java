@@ -3,14 +3,12 @@ package com.wegrzyn.marcin.bakingapp;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -80,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
 
     private void getRecipes(){
 
-// espresso waiting start
+//              espresso waiting start
 
         idlingResource.increment();
 
@@ -97,7 +95,9 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
                     adapter.setRecipeList(recipeList);
                     adapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.INVISIBLE);
-// espresso waiting stop
+
+//                  espresso waiting stop
+
                     idlingResource.decrement();
                 }
             }
