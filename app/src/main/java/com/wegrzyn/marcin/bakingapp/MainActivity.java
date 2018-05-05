@@ -3,6 +3,9 @@ package com.wegrzyn.marcin.bakingapp;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingRegistry;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -39,10 +42,15 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
     private RecipesAdapter adapter;
     private List<Recipe> recipeList;
 
+    CountingIdlingResource idlingResource = new CountingIdlingResource("loader_data");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        IdlingRegistry.getInstance().register(idlingResource);
 
 
         progressBar = findViewById(R.id.progress);
@@ -72,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
 
     private void getRecipes(){
 
+// espresso waiting start
+
+        idlingResource.increment();
+
         progressBar.setVisibility(View.VISIBLE);
 
         HttpOperation httpOperation = HttpUtils.getHttpService();
@@ -80,18 +92,18 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(@NonNull Call<List<Recipe>> call, @NonNull Response<List<Recipe>> response) {
-                Log.d(TAG,"\n"+"onResponse"+"\n");
                 if(response.isSuccessful()){
                     recipeList = response.body();
                     adapter.setRecipeList(recipeList);
                     adapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.INVISIBLE);
+// espresso waiting stop
+                    idlingResource.decrement();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Recipe>> call, @NonNull Throwable t) {
-                Log.d(TAG," onFailure: "+ t.getMessage());
                 Toast.makeText(getBaseContext(),t.getMessage(),Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
             }
@@ -133,4 +145,9 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
         sendBroadcast(intentWidget);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        IdlingRegistry.getInstance().unregister(idlingResource);
+    }
 }

@@ -1,6 +1,7 @@
 package com.wegrzyn.marcin.bakingapp;
 
 import android.os.Parcelable;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class RecipeStepsActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_steps);
 
@@ -45,6 +47,8 @@ public class RecipeStepsActivity extends AppCompatActivity
                     &&!recipe.getSteps().get(curPosition).getVideoURL().isEmpty())
             getSupportActionBar().hide();
         }
+
+
 
         Bundle recipeBundle = new Bundle();
         recipeBundle.putParcelable(RECIPE,recipe);
