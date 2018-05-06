@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +24,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 import com.wegrzyn.marcin.bakingapp.Model.Ingredient;
 import com.wegrzyn.marcin.bakingapp.Model.Step;
 
@@ -88,9 +91,14 @@ public class DetailRecipeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.detail_steps_fragment, container, false);
+
         TextView descriptionTextView = rootView.findViewById(R.id.detail_tv);
         TextView titleTextView = rootView.findViewById(R.id.detail_tv_label);
+
         LinearLayout linearLayout = rootView.findViewById(R.id.landscape_ll);
+
+        ImageView thumbnailView = rootView.findViewById(R.id.thumbnailURL_iw);
+
         exoPlayerView = rootView.findViewById(R.id.simple_exo_player_view);
         setButton(rootView);
 
@@ -104,12 +112,24 @@ public class DetailRecipeFragment extends Fragment {
             titleTextView.setText(R.string.recipe_ingredients);
         }
 
-        if (step != null && !step.getVideoURL().isEmpty()) {
+        if ( step != null && !TextUtils.isEmpty(step.getVideoURL())) {
             exoPlayerInit(exoPosition);
             if (getResources().getBoolean(R.bool.landscape_mode)
                     && linearLayout != null)
                 linearLayout.setVisibility(View.GONE);
         } else exoPlayerView.setVisibility(View.GONE);
+
+        if ( step != null && ! TextUtils.isEmpty(step.getThumbnailURL())){
+
+            Picasso.with(getContext())
+//                    .load("http://i.imgur.com/DvpvklR.png")
+                    .load(step.getThumbnailURL())
+                    .resize(50, 50)
+                    .centerCrop()
+                    .into(thumbnailView);
+        } else {
+            thumbnailView.setVisibility(View.GONE);
+        }
         return rootView;
     }
 
@@ -128,8 +148,7 @@ public class DetailRecipeFragment extends Fragment {
             exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
             exoPlayerView.setPlayer(exoPlayer);
 
-
-            String userAgent = Util.getUserAgent(getContext(), "recipe");
+            String userAgent = Util.getUserAgent(getContext(), getString(R.string.recipe));
             MediaSource mediaSource = new ExtractorMediaSource.Factory(new DefaultDataSourceFactory(requireContext(), userAgent))
                     .createMediaSource(Uri.parse(step.getVideoURL()));
             exoPlayer.prepare(mediaSource);
@@ -154,7 +173,6 @@ public class DetailRecipeFragment extends Fragment {
             outState.putLong(EXO_POSITION, exoPlayer.getCurrentPosition());
             outState.putBoolean(EXO_STATE, exoPlayer.getPlayWhenReady());
         }
-
     }
 
     @Override

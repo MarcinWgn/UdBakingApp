@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
 
         if (savedInstanceState != null ){
             recipeList = savedInstanceState.getParcelableArrayList(RECIPE_LIST);
-        }else getRecipes();
+        }else
+            if(HttpUtils.isInternetConnections(this))getRecipes();
 
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Li
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if(itemId == R.id.refresh_item_id){
-            getRecipes();
+           if(HttpUtils.isInternetConnections(this)) getRecipes();
             return true;
         }else return super.onOptionsItemSelected(item);
     }
