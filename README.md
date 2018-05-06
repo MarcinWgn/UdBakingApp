@@ -1,4 +1,4 @@
 # UdBakingApp
 
-Android Developer Nanodegree Program Udacity 
-course project P3
+Android Developer Nanodegree Program Udacity <br>
+Course project P3
